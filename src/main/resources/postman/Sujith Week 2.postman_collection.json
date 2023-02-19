@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "c4c3c9d0-7111-4835-9a37-00c717a0da23",
+		"name": "Sujith Week 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AML-SOAP-COMMAND-TEMPLATE-8081",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/soap/command-template",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"soap",
+						"command-template"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-REST-COMMAND-TEMPLATE-8081",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/rest/template",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"template"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-REST-COMMAND-SUBMISSION-7070",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"individualTag\": \"Y\",\r\n    \"firstNameEn\": \"Chrizzy\",\r\n    \"middleNameEn\": \"Poqui\",\r\n    \"lastNameEn\": \"Loco\",\r\n    \"dateOfBirth\": \"2001-03-17\",\r\n    \"placeOfBirth\": \"PH\",\r\n    \"nationality\": \"Filipino\",\r\n    \"contactNo\": \"090101010101\",\r\n    \"gender\": \"F\",\r\n    \"identificationType\": \"sss\",\r\n    \"identificationNo\": \"112313213\",\r\n    \"resAddrRoom\": \"1\",\r\n    \"resAddrFloor\": \"1\",\r\n    \"resAddrBlock\": \"28\",\r\n    \"resAddrLot\": \"3\",\r\n    \"resAddrBuildingName\": \"\",\r\n    \"resAddrStreet\": \"PUD Site\",\r\n    \"resAddrVillage\": \"Escopa\",\r\n    \"resAddrHousingProject\": \"Project 4\",\r\n    \"resAddrDistrict\": \"2\",\r\n    \"resAddrCity\": \"QC\",\r\n    \"resAddrCountryCode\": \"PH\",\r\n    \"companyNameEn\": null,\r\n    \"companyType\": null,\r\n    \"companyTelNo\": null,\r\n    \"companyPrimaryContactNo\": null,\r\n    \"companyDateOfIncorporation\": null,\r\n    \"companyCertificationType\": null,\r\n    \"companyCertificationNo\": null,\r\n    \"companyRegistrationType\": null,\r\n    \"companyRegistrationNo\": null,\r\n    \"comAddrRoom\": null,\r\n    \"comAddrFloor\": null,\r\n    \"comAddrBlock\": null,\r\n    \"comAddrLot\": null,\r\n    \"comAddrBuildingName\": null,\r\n    \"comAddrStreet\": null,\r\n    \"comAddrVillage\": null,\r\n    \"comAddrHousingProject\": null,\r\n    \"comAddrDistrict\": null,\r\n    \"comAddrCity\": null,\r\n    \"comAddrCountryCode\": null,\r\n    \"countryCodeIncorporation\": \"PH\",\r\n    \"countryCodeOperation\": \"PH\",\r\n    \"authorizedSigners\": \"Y\",\r\n    \"legal\": \"Y\",\r\n    \"management\": \"Y\",\r\n    \"owner\": \"Y\",\r\n    \"regulatory\": \"Y\",\r\n    \"companySourceIncome\": null,\r\n    \"natureOfCompany\": \"IT Industry\",\r\n    \"individualSourceIncome\": \"STAFF\",\r\n    \"natureOfIndividualSourceIncome\": null,\r\n    \"role\": null,\r\n    \"clientId\": \"fa8c20e6-28e7-4dd0-a335-fd9e73a25950\",\r\n    \"clientAcctId\": \"edaae4bd-ea0c-4e9b-a673-155591e19e62\",\r\n    \"clientType\": \"PERSON\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:7070/mas/aml-check/v1/external/rest/command",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-REST-COMMAND-SUBMISSION-8081",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"individualTag\": \"Y\",\r\n    \"firstNameEn\": \"Chrizzy\",\r\n    \"middleNameEn\": \"Poqui\",\r\n    \"lastNameEn\": \"Loco\",\r\n    \"dateOfBirth\": \"2001-03-17\",\r\n    \"placeOfBirth\": \"PH\",\r\n    \"nationality\": \"Filipino\",\r\n    \"contactNo\": \"090101010101\",\r\n    \"gender\": \"F\",\r\n    \"identificationType\": \"sss\",\r\n    \"identificationNo\": \"112313213\",\r\n    \"resAddrRoom\": \"1\",\r\n    \"resAddrFloor\": \"1\",\r\n    \"resAddrBlock\": \"28\",\r\n    \"resAddrLot\": \"3\",\r\n    \"resAddrBuildingName\": \"\",\r\n    \"resAddrStreet\": \"PUD Site\",\r\n    \"resAddrVillage\": \"Escopa\",\r\n    \"resAddrHousingProject\": \"Project 4\",\r\n    \"resAddrDistrict\": \"2\",\r\n    \"resAddrCity\": \"QC\",\r\n    \"resAddrCountryCode\": \"PH\",\r\n    \"companyNameEn\": null,\r\n    \"companyType\": null,\r\n    \"companyTelNo\": null,\r\n    \"companyPrimaryContactNo\": null,\r\n    \"companyDateOfIncorporation\": null,\r\n    \"companyCertificationType\": null,\r\n    \"companyCertificationNo\": null,\r\n    \"companyRegistrationType\": null,\r\n    \"companyRegistrationNo\": null,\r\n    \"comAddrRoom\": null,\r\n    \"comAddrFloor\": null,\r\n    \"comAddrBlock\": null,\r\n    \"comAddrLot\": null,\r\n    \"comAddrBuildingName\": null,\r\n    \"comAddrStreet\": null,\r\n    \"comAddrVillage\": null,\r\n    \"comAddrHousingProject\": null,\r\n    \"comAddrDistrict\": null,\r\n    \"comAddrCity\": null,\r\n    \"comAddrCountryCode\": null,\r\n    \"countryCodeIncorporation\": \"PH\",\r\n    \"countryCodeOperation\": \"PH\",\r\n    \"authorizedSigners\": \"Y\",\r\n    \"legal\": \"Y\",\r\n    \"management\": \"Y\",\r\n    \"owner\": \"Y\",\r\n    \"regulatory\": \"Y\",\r\n    \"companySourceIncome\": null,\r\n    \"natureOfCompany\": \"IT Industry\",\r\n    \"individualSourceIncome\": \"STAFF\",\r\n    \"natureOfIndividualSourceIncome\": null,\r\n    \"role\": null,\r\n    \"clientId\": \"fa8c20e6-28e7-4dd0-a335-fd9e73a25950\",\r\n    \"clientAcctId\": \"edaae4bd-ea0c-4e9b-a673-155591e19e62\",\r\n    \"clientType\": \"PERSON\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/rest/command",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-SOAP-COMMAND-SUBMISSION-6060",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"individualTag\": \"Y\",\r\n    \"firstNameEn\": \"Chrizzy\",\r\n    \"middleNameEn\": \"Poqui\",\r\n    \"lastNameEn\": \"Loco\",\r\n    \"dateOfBirth\": \"2001-03-17\",\r\n    \"placeOfBirth\": \"PH\",\r\n    \"nationality\": \"Filipino\",\r\n    \"contactNo\": \"090101010101\",\r\n    \"gender\": \"F\",\r\n    \"identificationType\": \"sss\",\r\n    \"identificationNo\": \"112313213\",\r\n    \"resAddrRoom\": \"1\",\r\n    \"resAddrFloor\": \"1\",\r\n    \"resAddrBlock\": \"28\",\r\n    \"resAddrLot\": \"3\",\r\n    \"resAddrBuildingName\": \"\",\r\n    \"resAddrStreet\": \"PUD Site\",\r\n    \"resAddrVillage\": \"Escopa\",\r\n    \"resAddrHousingProject\": \"Project 4\",\r\n    \"resAddrDistrict\": \"2\",\r\n    \"resAddrCity\": \"QC\",\r\n    \"resAddrCountryCode\": \"PH\",\r\n    \"companyNameEn\": null,\r\n    \"companyType\": null,\r\n    \"companyTelNo\": null,\r\n    \"companyPrimaryContactNo\": null,\r\n    \"companyDateOfIncorporation\": null,\r\n    \"companyCertificationType\": null,\r\n    \"companyCertificationNo\": null,\r\n    \"companyRegistrationType\": null,\r\n    \"companyRegistrationNo\": null,\r\n    \"comAddrRoom\": null,\r\n    \"comAddrFloor\": null,\r\n    \"comAddrBlock\": null,\r\n    \"comAddrLot\": null,\r\n    \"comAddrBuildingName\": null,\r\n    \"comAddrStreet\": null,\r\n    \"comAddrVillage\": null,\r\n    \"comAddrHousingProject\": null,\r\n    \"comAddrDistrict\": null,\r\n    \"comAddrCity\": null,\r\n    \"comAddrCountryCode\": null,\r\n    \"countryCodeIncorporation\": \"PH\",\r\n    \"countryCodeOperation\": \"PH\",\r\n    \"authorizedSigners\": \"Y\",\r\n    \"legal\": \"Y\",\r\n    \"management\": \"Y\",\r\n    \"owner\": \"Y\",\r\n    \"regulatory\": \"Y\",\r\n    \"companySourceIncome\": null,\r\n    \"natureOfCompany\": \"IT Industry\",\r\n    \"individualSourceIncome\": \"STAFF\",\r\n    \"natureOfIndividualSourceIncome\": null,\r\n    \"role\": null,\r\n    \"clientId\": \"fa8c20e6-28e7-4dd0-a335-fd9e73a25950\",\r\n    \"clientAcctId\": \"edaae4bd-ea0c-4e9b-a673-155591e19e62\",\r\n    \"clientType\": \"PERSON\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6060/mas/aml-check/v1/command",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6060",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-REST-LOAD-COMMAND-REPLY-7070",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:7070/mas/aml-check/v1/external/rest/command/reply/0ca48f6c-7e7f-40e0-821f-621b8f8a3327",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"command",
+						"reply",
+						"0ca48f6c-7e7f-40e0-821f-621b8f8a3327"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-REST-LOAD-COMMAND-REPLY-8081",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/rest/command?replyId=b1c5dd22-d6a3-44a9-8416-de8e86833887",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"command"
+					],
+					"query": [
+						{
+							"key": "replyId",
+							"value": "b1c5dd22-d6a3-44a9-8416-de8e86833887"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-SOAP-LOAD-COMMAND-REPLY-6060",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/soap/command/reply/{commandId}",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"soap",
+						"command",
+						"reply",
+						"{commandId}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-INTERNAL-INSERT-COMMAND-8081",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"individualTag\": \"Y\",\r\n    \"firstNameEn\": \"Chrizzy\",\r\n    \"middleNameEn\": \"Poqui\",\r\n    \"lastNameEn\": \"Loco\",\r\n    \"dateOfBirth\": \"2001-03-17\",\r\n    \"placeOfBirth\": \"PH\",\r\n    \"nationality\": \"Filipino\",\r\n    \"contactNo\": \"090101010101\",\r\n    \"gender\": \"F\",\r\n    \"identificationType\": \"sss\",\r\n    \"identificationNo\": \"112313213\",\r\n    \"resAddrRoom\": \"1\",\r\n    \"resAddrFloor\": \"1\",\r\n    \"resAddrBlock\": \"28\",\r\n    \"resAddrLot\": \"3\",\r\n    \"resAddrBuildingName\": \"\",\r\n    \"resAddrStreet\": \"PUD Site\",\r\n    \"resAddrVillage\": \"Escopa\",\r\n    \"resAddrHousingProject\": \"Project 4\",\r\n    \"resAddrDistrict\": \"2\",\r\n    \"resAddrCity\": \"QC\",\r\n    \"resAddrCountryCode\": \"PH\",\r\n    \"companyNameEn\": null,\r\n    \"companyType\": null,\r\n    \"companyTelNo\": null,\r\n    \"companyPrimaryContactNo\": null,\r\n    \"companyDateOfIncorporation\": null,\r\n    \"companyCertificationType\": null,\r\n    \"companyCertificationNo\": null,\r\n    \"companyRegistrationType\": null,\r\n    \"companyRegistrationNo\": null,\r\n    \"comAddrRoom\": null,\r\n    \"comAddrFloor\": null,\r\n    \"comAddrBlock\": null,\r\n    \"comAddrLot\": null,\r\n    \"comAddrBuildingName\": null,\r\n    \"comAddrStreet\": null,\r\n    \"comAddrVillage\": null,\r\n    \"comAddrHousingProject\": null,\r\n    \"comAddrDistrict\": null,\r\n    \"comAddrCity\": null,\r\n    \"comAddrCountryCode\": null,\r\n    \"countryCodeIncorporation\": \"PH\",\r\n    \"countryCodeOperation\": \"PH\",\r\n    \"authorizedSigners\": \"Y\",\r\n    \"legal\": \"Y\",\r\n    \"management\": \"Y\",\r\n    \"owner\": \"Y\",\r\n    \"regulatory\": \"Y\",\r\n    \"companySourceIncome\": null,\r\n    \"natureOfCompany\": \"IT Industry\",\r\n    \"individualSourceIncome\": \"STAFF\",\r\n    \"natureOfIndividualSourceIncome\": null,\r\n    \"role\": null,\r\n    \"clientId\": \"fa8c20e6-28e7-4dd0-a335-fd9e73a25950\",\r\n    \"clientAcctId\": \"edaae4bd-ea0c-4e9b-a673-155591e19e62\",\r\n    \"clientType\": \"PERSON\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/internal/rest/command",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"internal",
+						"rest",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AML-EXTERNAL-TRANS-CLIENT-REPORT",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/mas/aml-check/v1/external/rest/command",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mas",
+						"aml-check",
+						"v1",
+						"external",
+						"rest",
+						"command"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

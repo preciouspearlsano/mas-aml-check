@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d4275327-0a5d-4de3-b2b2-c2a0a1274e78" basePath="/mas/aml-check/v1" enableCookies="false">
+		<http:request-connection host="localhost" port="7070" />
+	</http:request-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="4f338c46-56c3-4887-ba07-995c059b10ba" file="db-secure-dev.yaml" key="abcdefghijklmnop" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="c3e55ab9-1b1a-4ebd-a72f-951cb676cabd" >
+		<wsc:connection wsdlLocation="http://localhost:6060/ws/command.wsdl" service="CommandPortService" port="CommandPortSoap11" address="http://localhost:6060/ws" mtomEnabled="true">
+			<wsc:custom-transport-configuration >
+				<wsc:default-http-transport-configuration timeout="60000" />
+			</wsc:custom-transport-configuration>
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="191312be-cede-40dc-bb55-371d13b77078" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="fcaf136b-ecde-42f8-b9bf-fda67a1da37f" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="root" database="aml_dev" />
+	</db:config>
+	<flow name="endpoint-get-command-reply-rest" doc:id="e7598300-856b-41b9-a1c1-0cb53818e4ab" >
+		<http:request method="GET" doc:name="Request" doc:id="8bd3d8de-74d2-4db7-8d70-f4266dac9701" config-ref="HTTP_Request_configuration" path="/external/rest/command/reply/{replyId}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	replyId : attributes.queryParams.replyId
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+
+	<flow name="endpoint-internal-insert-command-test-flow" doc:id="ff3ebac2-7274-4eec-9557-18bee12e3c3f" >
+		<http:listener doc:name="Listener" doc:id="a2e5ac16-216b-4409-b5c3-fd6cc932d739" path="/internal/json/db/command" config-ref="HTTP_Listener_config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6aedd94d-e5ac-4f39-af41-cdfa0ccf2267" message="#[payload]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="0c73276d-f421-4eec-a6d8-452cc3f1ead6" name="internal-insert-command-log-subflow"/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	message : "insert success."&#10;}]' doc:name="Set Payload" doc:id="75c0b421-d7b9-4e84-8b69-8efddd24c75c" mimeType="application/json" encoding="UTF-8"/>
+	</flow>
+	<flow name="endpoint-internal-select-reply-status-by-commandid-test-mainflow" doc:id="7b092e27-5644-4441-a111-877fb96fb70c" >
+		<http:listener doc:name="Listener" doc:id="a276358b-d080-4ff5-96e6-aba713054a5b" path="/internal/json/db/command/{commandId}" config-ref="HTTP_Listener_config"/>
+		<db:select doc:name="Select" doc:id="b1c553f6-83fe-4a52-a1e8-cd8ed6b41bb8" config-ref="Database_Config">
+			<db:sql ><![CDATA[select CONVERT(so.data USING utf8) as commandReplyModel from sys_outbox so 
+where so.command_id = :commandId and so.event_type = 'rpy']]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	commandId: attributes.uriParams.commandId as String
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="be673ae4-3947-40a5-8d1c-b45e8475a6f0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var commandreply = payload.commandReplyModel[0] as String
+---
+read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/json")]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<sub-flow name="internal-insert-command-log-subflow" doc:id="d7d05fed-296a-491c-a9f0-2bbfc48aef84" >
+		<set-variable value="#[%dw 2.0&#10;output application/json&#10;import java!java::util::UUID&#10;---&#10;{&#10;  uuid: UUID::randomUUID() as String&#10;}]" doc:name="getCustomId" doc:id="42f52153-1ab9-4261-be54-f2e057d192c0" variableName="getCustomId"/>
+		<set-variable value='#[%dw 2.0&#10;var currentDateTime = now() as String {format: "yyyy-MM-dd HH:mm:ss.SSSSSS"}&#10;---&#10;currentDateTime]' doc:name="getDate" doc:id="ccd43f3e-bc42-4a24-8da5-31bd7db12ca0" variableName="getDate"/>
+		<ee:transform doc:name="Transform Message" doc:id="0e9087a5-7977-42f3-beed-33952090774a" >
+			<ee:message >
+				<ee:set-payload resource="insert_commandjson.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="f950b233-be01-4595-886f-d122e8d92f2b" message="#[payload]"/>
+		<db:insert doc:name="Insert" doc:id="592471b6-bc5c-44ea-9502-760805bce542">
+					<db:sql><![CDATA[INSERT INTO txn_command VALUES 
+(:id, :firstNameEn, :middleNameEn, :lastNameEn, :dateOfBirth, 
+:placeOfBirth, :nationality, :contactNo, :gender, :identificationType, :identificationNo, 
+:resAddrRoom, :resAddrFloor, :resAddrBlock, :resAddrLot, :resAddrBuildingName, 
+:resAddrBuildingName, :resAddrVillage, :resAddrHousingProject, :resAddrDistrict, :resAddrCity, :resAddrCountryCode, 
+
+:companyNameEn, :companyType, :companyTelNo, :companyPrimaryContactNo, :companyDateOfIncorporation, 
+:companyCertificationType, :companyCertificationNo, :companyRegistrationType, :companyRegistrationNo, 
+
+:comAddrRoom, :comAddrFloor, :comAddrBlock, :comAddrLot, :comAddrBuildingName, 
+:comAddrStreet, :comAddrVillage, :comAddrHousingProject, :comAddrDistrict, :comAddrCity, :comAddrCountryCode, 
+
+:countryCodeIncorporation, :countryCodeOperation, :authorizedSigners, :legal, :management, :owner, :regulatory, :companySourceIncome, :natureOfCompany, :individualSourceIncome, :natureOfIndividualSourceIncome, 
+
+:role, :clientId, :clientAcctId, :clientType, :creationDate
+)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+				</db:insert>
+	</sub-flow>
+	<flow name="mainflow-command-all-endpoint" doc:id="aad56e25-3e33-4a01-87b9-41dc17b74dd4" >
+		<http:listener doc:name="Listener" doc:id="71c5971f-e18c-4cfd-b9ea-32517cbbb256" path="/external/command" config-ref="HTTP_Listener_config">
+			<http:error-response >
+				<http:body ><![CDATA[#[output application/json --- error.errorType]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<choice doc:name="Choice" doc:id="5a44b8aa-634e-4f68-878f-c3016650cfaa" >
+			<when expression="#[attributes.method == 'POST']">
+				<first-successful doc:name="First Successful" doc:id="e0ca3642-9c39-4d3e-85e7-13c074c783c1" >
+					<route >
+						<flow-ref doc:name="REST Flow Reference" doc:id="4157ee09-c133-4cf8-97c5-46bd269e22f3" name="endpoint-post-command-rest" />
+						<logger level="INFO" doc:name="Logger" doc:id="316bc8bc-95b2-435b-ab9e-68a7a40ed61b" message="#[post : payload]"/>
+					</route>
+				</first-successful>
+				<until-successful maxRetries="5" doc:name="Until Successful" doc:id="713f00d0-5d11-4bee-9656-b915308d9601" >
+					<set-payload value="#[payload]" doc:name="Set Payload" doc:id="14efb80a-4ba7-47ac-b87b-e61ac3c31466" />
+				</until-successful>
+			</when>
+			<when expression="#[attributes.method == 'GET']">
+				<scatter-gather doc:name="Scatter-Gather" doc:id="aada6606-90c0-438f-b846-5a09877a7767" >
+					<route >
+						<flow-ref doc:name="REST Flow Reference" doc:id="59cbdbc7-aba7-4662-aa5d-9daac07ff5cb" name="endpoint-get-command-reply-rest" targetValue="#[message]" />
+						<ee:transform doc:name="Transform Message" doc:id="1c876314-0f93-463e-8970-7379915c2dae">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	rest : payload
+}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+					</route>
+					<route >
+						<flow-ref doc:name="DB Flow Reference" doc:id="d7f5c522-4939-4291-b9fe-5f131de4640d" name="endpoint-internal-select-reply-status-by-commandid-test-mainflow" targetValue="#[message]" />
+						<ee:transform doc:name="Transform Message" doc:id="d9e4a6c3-288e-413e-adf2-ce8a601c2c0f">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	db : payload
+}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+					</route>
+				</scatter-gather>
+				<choice doc:name="Choice" doc:id="64af563c-929d-4fab-9a21-3f7b37fc49c5" >
+					<when expression="#[flatten(payload..payload) != null]">
+						<ee:transform doc:name="Transform Message" doc:id="adcf6715-95a2-49aa-b784-5c188d4b068b">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+flatten(payload..payload)]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+					</when>
+					<otherwise>
+						<ee:transform doc:name="Transform Message" doc:id="10ffe09b-f6bc-4058-9002-2b9aff3c48b9" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	response : "Offline."
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</otherwise>
+				</choice>
+			</when>
+			<otherwise >
+				<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	message : "No endpoint found."&#10;}]' doc:name="Set Payload" doc:id="3a35cbba-a0a0-4e7b-ad30-c2cde42b2c90" mimeType="application/json" encoding="UTF-8"/>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="endpoint-post-command-rest" doc:id="aeffd3a0-6a8e-4353-9853-56fb3537e215" >
+		<ee:transform doc:name="Transform Message" doc:id="e5449cef-b4f7-4fe1-a06e-2496eab212e3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+type customermodel = Object {class:"mas.amlcheck.dto.CustomerFormCommand"}
+
+---
+payload as customermodel
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request" doc:id="bb103d13-cf24-4a02-b244-5e15e5bc3e59" config-ref="HTTP_Request_configuration" path="/external/rest/command">
+			<error-mapping sourceType="HTTP:CONNECTIVITY" targetType="APP:APICONNECTIVITY" />
+		</http:request>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b4e691ba-8b6a-47b9-add1-39ab35fd77b1" type="APP:APICONNECTIVITY">
+				<set-payload value='#["Offline endpoint-post-command-rest"]' doc:name="Set Payload" doc:id="ce1c6bc1-e86e-4e30-9dce-11dbad9be9f8" />
+				<logger level="INFO" doc:name="Logger" doc:id="76d37cd0-f322-43f6-9872-326f4a9ed0bd" message="#[payload]"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="endpoint-post-command-soap" doc:id="1864e809-3c43-4bea-b185-3b8283a90705" >
+		<http:listener doc:name="Listener" doc:id="a077e668-d956-453c-a142-956f7e38391d" path="/external/soap/command" config-ref="HTTP_Listener_config"/>
+		<ee:transform doc:name="Transform Message" doc:id="57fb5c93-a36d-4350-99fc-a4592d97117c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns mod http://mas/aml/soap/model
+---
+{
+	mod#getCustomerFormCommandRequest : payload
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="1762173e-0343-4882-b55f-01c93ecafcf1" message="#[payload]" />
+		<wsc:consume operation="getCustomerFormCommand" doc:name="Consume" doc:id="738e1780-5a79-43d6-8ac2-ae5f92c599e5" config-ref="Web_Service_Consumer_Config" />
+		<java:invoke-static doc:name="Invoke static" doc:id="25351f05-b0ec-40af-b5e9-aba98594d291" class="mas.amlcheck.service.AmlCheckService" method="getLastLog()"/>
+		<ee:transform doc:name="Transform Message" doc:id="085954c1-b901-482a-92b8-4bf44966a31e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	response : payload
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

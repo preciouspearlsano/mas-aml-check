@@ -1,0 +1,59 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:attribute default="Y" name="individualTag" type="xs:string"/>
+    <xs:attribute default="Chrizzy" name="firstNameEn" type="xs:string"/>
+    <xs:attribute default="Poqui" name="middleNameEn" type="xs:string"/>
+    <xs:attribute default="Loco" name="lastNameEn" type="xs:string"/>
+    <xs:attribute default="2001-03-17" name="dateOfBirth" type="xs:string"/>
+    <xs:attribute default="PH" name="placeOfBirth" type="xs:string"/>
+    <xs:attribute default="Filipino" name="nationality" type="xs:string"/>
+    <xs:attribute default="090101010101" name="contactNo" type="xs:string"/>
+    <xs:attribute default="F" name="gender" type="xs:string"/>
+    <xs:attribute default="sss" name="identificationType" type="xs:string"/>
+    <xs:attribute default="112313213" name="identificationNo" type="xs:string"/>
+    <xs:attribute default="1" name="resAddrRoom" type="xs:string"/>
+    <xs:attribute default="1" name="resAddrFloor" type="xs:string"/>
+    <xs:attribute default="28" name="resAddrBlock" type="xs:string"/>
+    <xs:attribute default="3" name="resAddrLot" type="xs:string"/>
+    <xs:attribute default="" name="resAddrBuildingName" type="xs:string"/>
+    <xs:attribute default="PUD Site" name="resAddrStreet" type="xs:string"/>
+    <xs:attribute default="Escopa" name="resAddrVillage" type="xs:string"/>
+    <xs:attribute default="Project 4" name="resAddrHousingProject" type="xs:string"/>
+    <xs:attribute default="2" name="resAddrDistrict" type="xs:string"/>
+    <xs:attribute default="QC" name="resAddrCity" type="xs:string"/>
+    <xs:attribute default="PH" name="resAddrCountryCode" type="xs:string"/>
+    <xs:attribute default="null" name="companyNameEn" type="xs:string"/>
+    <xs:attribute default="null" name="companyType" type="xs:string"/>
+    <xs:attribute default="null" name="companyTelNo" type="xs:string"/>
+    <xs:attribute default="null" name="companyPrimaryContactNo" type="xs:string"/>
+    <xs:attribute default="null" name="companyDateOfIncorporation" type="xs:string"/>
+    <xs:attribute default="null" name="companyCertificationType" type="xs:string"/>
+    <xs:attribute default="null" name="companyCertificationNo" type="xs:string"/>
+    <xs:attribute default="null" name="companyRegistrationType" type="xs:string"/>
+    <xs:attribute default="null" name="companyRegistrationNo" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrRoom" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrFloor" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrBlock" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrLot" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrBuildingName" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrStreet" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrVillage" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrHousingProject" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrDistrict" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrCity" type="xs:string"/>
+    <xs:attribute default="null" name="comAddrCountryCode" type="xs:string"/>
+    <xs:attribute default="PH" name="countryCodeIncorporation" type="xs:string"/>
+    <xs:attribute default="PH" name="countryCodeOperation" type="xs:string"/>
+    <xs:attribute default="Y" name="authorizedSigners" type="xs:string"/>
+    <xs:attribute default="Y" name="legal" type="xs:string"/>
+    <xs:attribute default="Y" name="management" type="xs:string"/>
+    <xs:attribute default="Y" name="owner" type="xs:string"/>
+    <xs:attribute default="Y" name="regulatory" type="xs:string"/>
+    <xs:attribute default="null" name="companySourceIncome" type="xs:string"/>
+    <xs:attribute default="IT Industry" name="natureOfCompany" type="xs:string"/>
+    <xs:attribute default="STAFF" name="individualSourceIncome" type="xs:string"/>
+    <xs:attribute default="null" name="natureOfIndividualSourceIncome" type="xs:string"/>
+    <xs:attribute default="null" name="role" type="xs:string"/>
+    <xs:attribute default="fa8c20e6-28e7-4dd0-a335-fd9e73a25950" name="clientId" type="xs:string"/>
+    <xs:attribute default="edaae4bd-ea0c-4e9b-a673-155591e19e62" name="clientAcctId" type="xs:string"/>
+    <xs:attribute default="PERSON" name="clientType" type="xs:string"/>
+</xs:schema>

@@ -1,0 +1,1 @@
+java -jar mas-aml-rest-0.0.1-SNAPSHOT.jar --server.port=7070

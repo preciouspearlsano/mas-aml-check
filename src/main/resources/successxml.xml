@@ -1,0 +1,9 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <GetRequestSuccessResponse xmlns:ns2="http://mas/aml/soap/model">
+         <ns2:commandId>23a3256d-30f6-4c50-af23-2112c869a821</ns2:commandId>
+         <ns2:success>true</ns2:success>
+      </GetRequestSuccessResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

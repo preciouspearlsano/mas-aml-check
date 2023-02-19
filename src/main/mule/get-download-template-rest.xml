@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="b4c4da13-b664-4fe0-b42e-e20f4654d2f5" >
+		<file:connection workingDir="c:\files" />
+	</file:config>
+	
+	
+	
+	<flow name="rest-template-flow" doc:id="a77ca0e9-6256-4ba5-85c7-8233fcc7c844" >
+		<http:listener doc:name="Listener" doc:id="90945dc1-8243-4045-8cdb-625998bfd548" path="/external/rest/template" config-ref="HTTP_Listener_config"/>
+		<java:invoke-static doc:name="Invoke static" doc:id="b99ae07c-0410-4f49-835c-e7ef10e1ba59" class="mas.amlcheck.service.AmlCheckService" method="getRestTemplateStatus()"/>
+		<file:read doc:name="Read" doc:id="4b61e23a-39ae-4fd4-8e1b-a03dace43114" config-ref="File_Config" path='#["c:\\files\\template-aml\\" ++ payload]'/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="40c63165-21d6-4a12-9555-3a3dd1a8e577" />
+	</flow>
+	
+
+</mule>
