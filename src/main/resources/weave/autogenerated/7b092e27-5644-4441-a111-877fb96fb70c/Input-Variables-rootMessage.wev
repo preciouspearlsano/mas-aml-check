@@ -1,6 +1,10 @@
 %dw 2.0
 
-type auto_1864e809_3c43_4bea_b185_3b8283a90705_Input_Attributes = {|
+type auto_7b092e27_5644_4441_a111_877fb96fb70c_Input_Variables_rootMessage = {|
+  payload: Any, 
+  attributes: org_mule_extension_http_api_HttpRequestAttributes
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type org_mule_extension_http_api_HttpRequestAttributes = {|
   listenerPath: String, 
   rawRequestPath: String, 
   relativePath: String, 
@@ -28,6 +32,8 @@ type java_security_cert_Certificate = {|
 "typeId": "java.security.cert.Certificate"}
 type java_security_PublicKey = {|  |} {"typeAlias": "PublicKey",
 "typeId": "java.security.PublicKey"}
+
+
 
 
 

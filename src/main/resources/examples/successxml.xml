@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mod="http://mas/aml/soap/model">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <mod:getRequestSuccessResponse>
+         <!--Optional:-->
+         <mod:commandId>?</mod:commandId>
+         <mod:success>?</mod:success>
+      </mod:getRequestSuccessResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

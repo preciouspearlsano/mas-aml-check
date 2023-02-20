@@ -1,11 +1,4 @@
 {
   "minMuleVersion": "4.4.0",
-  "logConfigFile": "logback-springs.xml",
-  "classLoaderModelLoaderDescriptor": {
-    "id": "mule",
-    "attributes": {
-      "exportedResources": [],
-      "exportedPackages": ["mas.amlcheck"]
-    }
-  }
+  "logConfigFile": "logback-springs.xml"
 }

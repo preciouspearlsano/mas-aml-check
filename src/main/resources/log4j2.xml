@@ -27,6 +27,12 @@
         <!-- Mule logger -->
         <AsyncLogger name="org.mule.runtime.core.internal.processor.LoggerMessageProcessor" level="INFO"/>
 
+			<!-- Adjust log levels for more or less info -->
+			<AsyncLogger name="org.apache.cxf" level="DEBUG"/>
+			<!-- You may need to enable for more consumer debug  -->
+			<!-- <AsyncLogger name="org.mule.extension.ws" level="DEBUG"/> -->
+			<AsyncLogger name="org.mule.service.http.impl.service.HttpMessageLogger" level="DEBUG"/>
+			
         <AsyncRoot level="INFO">
             <AppenderRef ref="file"/>
         </AsyncRoot>

@@ -1,0 +1,14 @@
+{
+  "sampleData": {
+    "790007a3-2c18-446e-89f0-0ec7f4c89b44": {},
+    "0e9087a5-7977-42f3-beed-33952090774a": {
+      "attributes": "sample_data/name.xml"
+    },
+    "d2e7d065-2555-4d55-8513-5b13869c4464": {
+      "attributes": "sample_data/httpresponseattributes.dwl"
+    },
+    "e3cd9034-98b4-4bf3-b756-af3752efca57": {
+      "payload": "sample_data/defaultnulltype.dwl"
+    }
+  }
+}

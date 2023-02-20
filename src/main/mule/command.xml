@@ -25,11 +25,11 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
 		</wsc:connection>
 	</wsc:config>
-	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="191312be-cede-40dc-bb55-371d13b77078" >
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="191312be-cede-40dc-bb55-371d13b77078" basePath="/mas/aml-check/v1">
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="fcaf136b-ecde-42f8-b9bf-fda67a1da37f" >
-		<db:my-sql-connection host="localhost" port="3306" user="root" password="root" database="aml_dev" />
+		<db:my-sql-connection host="${secure::db.host}" port="3306" user="${secure::db.user}" password="${secure::db.password}" database="aml_dev" />
 	</db:config>
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="9edc773b-e633-4bd9-93c6-5e6215534ac8" />
 	<flow name="endpoint-get-command-reply-rest" doc:id="e7598300-856b-41b9-a1c1-0cb53818e4ab" >
@@ -51,6 +51,11 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 		<logger level="INFO" doc:name="Logger" doc:id="6aedd94d-e5ac-4f39-af41-cdfa0ccf2267" message="#[payload]"/>
 		<flow-ref doc:name="Flow Reference" doc:id="0c73276d-f421-4eec-a6d8-452cc3f1ead6" name="internal-insert-command-log-subflow"/>
 		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	message : "insert success."&#10;}]' doc:name="Set Payload" doc:id="75c0b421-d7b9-4e84-8b69-8efddd24c75c" mimeType="application/json" encoding="UTF-8"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a419b586-61e9-4eb0-b9dd-061511c4bf1f" type="ANY">
+				<logger level="INFO" doc:name="Logger" doc:id="1de0dc2d-4203-4604-a0cd-3b3765e3d14d" message="endpoint-internal-insert-command-test-flow DB error"/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<flow name="endpoint-internal-select-reply-status-by-commandid-test-mainflow" doc:id="7b092e27-5644-4441-a111-877fb96fb70c" >
 		<http:listener doc:name="Listener" doc:id="a276358b-d080-4ff5-96e6-aba713054a5b" path="/internal/json/db/command/{commandId}" config-ref="HTTP_Listener_config">
@@ -74,6 +79,11 @@ var commandreply = payload.commandReplyModel[0] as String
 read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/json")]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d9717e92-3daa-438a-b006-014019d13906" type="ANY">
+				<logger level="INFO" doc:name="Logger" doc:id="f6b1ebd4-ce65-4117-82c7-7659c9bce512" message="endpoint-internal-select-reply-status-by-commandid-test-mainflow DB ERROR"/>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 	<sub-flow name="internal-insert-command-log-subflow" doc:id="d7d05fed-296a-491c-a9f0-2bbfc48aef84" >
 		<set-variable value="#[%dw 2.0&#10;output application/json&#10;import java!java::util::UUID&#10;---&#10;{&#10;  uuid: UUID::randomUUID() as String&#10;}]" doc:name="getCustomId" doc:id="42f52153-1ab9-4261-be54-f2e057d192c0" variableName="getCustomId"/>
@@ -84,8 +94,8 @@ read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/jso
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="f950b233-be01-4595-886f-d122e8d92f2b" message="#[payload]"/>
-		<db:insert doc:name="Insert" doc:id="592471b6-bc5c-44ea-9502-760805bce542">
-					<db:sql><![CDATA[INSERT INTO txn_command VALUES 
+		<db:insert doc:name="Insert" doc:id="592471b6-bc5c-44ea-9502-760805bce542" config-ref="Database_Config">
+			<db:sql><![CDATA[INSERT INTO txn_command VALUES 
 (:id, :firstNameEn, :middleNameEn, :lastNameEn, :dateOfBirth, 
 :placeOfBirth, :nationality, :contactNo, :gender, :identificationType, :identificationNo, 
 :resAddrRoom, :resAddrFloor, :resAddrBlock, :resAddrLot, :resAddrBuildingName, 
@@ -111,7 +121,7 @@ read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/jso
 				<logger level="INFO" doc:name="Logger" doc:id="316bc8bc-95b2-435b-ab9e-68a7a40ed61b" message="#[payload]" />
 			</route>
 			<route >
-				<flow-ref doc:name="SOAP Flow Reference" doc:id="6c8f6a6a-2b42-4ca4-be14-25a0aaf8341c" name="endpoint-post-command-soap" targetValue="#[postsoap : payload]" />
+				<flow-ref doc:name="SOAP Flow Reference" doc:id="6c8f6a6a-2b42-4ca4-be14-25a0aaf8341c" name="endpoint-post-command-soap"/>
 				<logger level="INFO" doc:name="Logger" doc:id="6cfb727f-6fda-46b5-bb33-1b375b689dfe" message="#[payload]" />
 			</route>
 		</round-robin>
@@ -122,28 +132,22 @@ read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/jso
 				<http:body ><![CDATA[#[output application/json --- error.errorType]]]></http:body>
 			</http:error-response>
 		</http:listener>
-		<validation:is-null doc:name="Is null" doc:id="6ca6daa9-5514-4e7b-b305-45fb468797b5" value="#[payload == null]" message="Passing null data error.">
-			<error-mapping sourceType="VALIDATION:NOT_NULL" targetType="APP:API_REQUEST_IS_NULL" />
-		</validation:is-null>
 		<choice doc:name="Choice" doc:id="5a44b8aa-634e-4f68-878f-c3016650cfaa" >
 			<when expression="#[attributes.method == 'POST']">
+				<validation:is-not-null doc:name="Is not null" doc:id="c96ee449-0d0f-4769-9edf-d65f3f5db2f3" value="#[payload]" message="Passing null data error." />
 				<parallel-foreach doc:name="Parallel For Each" doc:id="b8c856d0-9d41-448f-b495-7b16ce800180" collection="#[payload]">
 					<first-successful doc:name="First Successful" doc:id="e0ca3642-9c39-4d3e-85e7-13c074c783c1">
 						<route >
-							<try doc:name="Try" doc:id="b2f70bd4-cf7a-4c78-811f-0ebab581b9d9" >
-								<flow-ref doc:name="Flow Reference" doc:id="79e95c11-53ff-4e99-9122-4e5c9d3798bd" name="subflow-command-all-endpoint" />
-								<error-handler >
-									<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="07fe31d3-5ff6-41eb-a1c8-4d303e2a1543" >
-										<logger level="INFO" doc:name="Logger" doc:id="02e341a9-0163-4cbc-9c26-07955e41c36e" message="Parallell For Each mainflow error!"/>
-									</on-error-continue>
-								</error-handler>
-							</try>
+							<flow-ref doc:name="Flow Reference" doc:id="79e95c11-53ff-4e99-9122-4e5c9d3798bd" name="subflow-command-all-endpoint" />
+						</route>
+						<route >
+							<flow-ref doc:name="Flow Reference" doc:id="c2343c93-b615-4ca4-b704-0afd041f0e34" name="subflow-command-all-endpoint"/>
 						</route>
 				</first-successful>
-				</parallel-foreach>
-				<until-successful maxRetries="5" doc:name="Until Successful" doc:id="713f00d0-5d11-4bee-9656-b915308d9601">
-					<set-payload value="#[payload]" doc:name="Set Payload" doc:id="14efb80a-4ba7-47ac-b87b-e61ac3c31466" />
+					<until-successful maxRetries="1" doc:name="Until Successful" doc:id="713f00d0-5d11-4bee-9656-b915308d9601">
+					<set-payload value="#[payload]" doc:name="Set Payload" doc:id="14efb80a-4ba7-47ac-b87b-e61ac3c31466" mimeType="application/json" encoding="UTF-8"/>
 				</until-successful>
+				</parallel-foreach>
 			</when>
 			<when expression="#[attributes.method == 'GET']">
 				<scatter-gather doc:name="Scatter-Gather" doc:id="aada6606-90c0-438f-b846-5a09877a7767" >
@@ -203,7 +207,7 @@ payload as customermodel
 		<ee:transform doc:name="Transform Message" doc:id="28d05e1e-2134-4ff0-8477-5404ab89c249" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 	rest : payload
@@ -237,14 +241,6 @@ output application/java
 	</error-handler>
 	<flow name="endpoint-post-command-soap" doc:id="1864e809-3c43-4bea-b185-3b8283a90705" >
 		<http:listener doc:name="Listener" doc:id="a077e668-d956-453c-a142-956f7e38391d" path="/external/soap/command" config-ref="HTTP_Listener_config">
-			<http:response >
-				<http:body ><![CDATA[#[%dw 2.0
-output application/json
----
-{
-	soap : payload
-}]]]></http:body>
-			</http:response>
 		</http:listener>
 		<ee:transform doc:name="Transform Message" doc:id="57fb5c93-a36d-4350-99fc-a4592d97117c" >
 			<ee:message >
@@ -263,6 +259,16 @@ ns mod http://mas/aml/soap/model
 			<error-mapping sourceType="WSC:CONNECTIVITY" targetType="APP:API_CONNECTIVITY" />
 			<error-mapping sourceType="WSC:SOAP_FAULT" targetType="APP:API_SOAP_FAULT" />
 		</wsc:consume>
-		<java:invoke-static doc:name="Invoke static" doc:id="b45713c6-1526-4592-8fbd-2c928496814a" class="mas.amlcheck.service.AmlCheckService" method="getLastLog()"/>
+		<java:invoke-static doc:name="Invoke static" doc:id="dd210c13-011e-4c3d-b7c4-d9394cf25090" class="mas.amlcheck.service.AmlCheckService" method="getLastLog()"/>
+		<ee:transform doc:name="Transform Message" doc:id="23360cb8-48a3-470c-b55a-2602b2e4fc83" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	soap : payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 </mule>

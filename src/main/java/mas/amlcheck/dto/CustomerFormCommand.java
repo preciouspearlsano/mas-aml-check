@@ -15,6 +15,7 @@ public class CustomerFormCommand {
 	//Person
 	private String individualTag;
 	
+	private String id;
 	private String firstNameEn;
 	private String middleNameEn;
 	private String lastNameEn;
@@ -62,8 +63,8 @@ public class CustomerFormCommand {
 	private String comAddrCountryCode;
 	
 	private String countryCodeIncorporation;
-	private String countryCodeOperation;
-	private String authorizedSigners;
+	private String countryCodeOperation; //
+	private String authorizedSigners; //
 	private String legal;
 	private String management;
 	private String owner;
@@ -78,5 +79,6 @@ public class CustomerFormCommand {
 	private String clientId;
 	private String clientAcctId;
 	private String clientType; //legalentity or person
+	private String creationDate;
 	
 }
