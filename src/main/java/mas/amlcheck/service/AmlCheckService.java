@@ -46,7 +46,7 @@ public class AmlCheckService {
 		// Use file module
 	}
 	
-	public static String getLastLog () {
+	public String getLastLog () {
 		String result = "";
 		String logFileName = "/mas-aml-check.log";
 		String clientPathName = "C:\\files\\log";
@@ -77,7 +77,7 @@ public class AmlCheckService {
 		return result;
 	}
 	
-	private static String tail2( File file, int lines) {
+	private String tail2( File file, int lines) {
 	    java.io.RandomAccessFile fileHandler = null;
 	    try {
 	        fileHandler = 

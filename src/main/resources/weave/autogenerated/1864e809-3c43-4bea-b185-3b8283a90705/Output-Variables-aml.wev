@@ -1,0 +1,6 @@
+%dw 2.0
+
+type auto_1864e809_3c43_4bea_b185_3b8283a90705_Output_Variables_aml = {| lastLog?: String |} {"typeAlias": "AmlCheckService",
+"class": "mas.amlcheck.service.AmlCheckService",
+"typeId": "mas.amlcheck.service.AmlCheckService"}
+

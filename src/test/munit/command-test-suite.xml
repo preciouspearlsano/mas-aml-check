@@ -17,16 +17,30 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<munit:set-event doc:name="Set Event" doc:id="60d6bf38-aa7f-422f-b2a6-91bbfa027b62" >
-				<munit:payload value='#[[{&#10;    "individualTag": "Y",&#10;    "firstNameEn": "Chrizzy",&#10;    "middleNameEn": "Poqui",&#10;    "lastNameEn": "Loco",&#10;    "dateOfBirth": "2001-03-17",&#10;    "placeOfBirth": "PH",&#10;    "nationality": "Filipino",&#10;    "contactNo": "090101010101",&#10;    "gender": "F",&#10;    "identificationType": "sss",&#10;    "identificationNo": "112313213",&#10;    "resAddrRoom": "1",&#10;    "resAddrFloor": "1",&#10;    "resAddrBlock": "28",&#10;    "resAddrLot": "3",&#10;    "resAddrBuildingName": "",&#10;    "resAddrStreet": "PUD Site",&#10;    "resAddrVillage": "Escopa",&#10;    "resAddrHousingProject": "Project 4",&#10;    "resAddrDistrict": "2",&#10;    "resAddrCity": "QC",&#10;    "resAddrCountryCode": "PH",&#10;    "companyNameEn": null,&#10;    "companyType": null,&#10;    "companyTelNo": null,&#10;    "companyPrimaryContactNo": null,&#10;    "companyDateOfIncorporation": null,&#10;    "companyCertificationType": null,&#10;    "companyCertificationNo": null,&#10;    "companyRegistrationType": null,&#10;    "companyRegistrationNo": null,&#10;    "comAddrRoom": null,&#10;    "comAddrFloor": null,&#10;    "comAddrBlock": null,&#10;    "comAddrLot": null,&#10;    "comAddrBuildingName": null,&#10;    "comAddrStreet": null,&#10;    "comAddrVillage": null,&#10;    "comAddrHousingProject": null,&#10;    "comAddrDistrict": null,&#10;    "comAddrCity": null,&#10;    "comAddrCountryCode": null,&#10;    "countryCodeIncorporation": "PH",&#10;    "countryCodeOperation": "PH",&#10;    "authorizedSigners": "Y",&#10;    "legal": "Y",&#10;    "management": "Y",&#10;    "owner": "Y",&#10;    "regulatory": "Y",&#10;    "companySourceIncome": null,&#10;    "natureOfCompany": "IT Industry",&#10;    "individualSourceIncome": "STAFF",&#10;    "natureOfIndividualSourceIncome": null,&#10;    "role": null,&#10;    "clientId": "fa8c20e6-28e7-4dd0-a335-fd9e73a25950",&#10;    "clientAcctId": "edaae4bd-ea0c-4e9b-a673-155591e19e62",&#10;    "clientType": "PERSON"&#10;}]]' />
-				<munit:attributes value="#[{'method':'POST'}] " />
-			</munit:set-event>
 			<flow-ref doc:name="Flow-ref to mainflow-command-all-endpoint" doc:id="b13e83a0-a5e1-4154-8ea9-48af5623d6d6" name="mainflow-command-all-endpoint"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="4878d31f-a86e-425d-b279-f2ea21c0ec2a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="command-test-suite-mainflow-command-all-endpoint-verifycall-test" doc:id="1179790f-8450-486b-b92d-03ba03ebb509" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to mainflow-command-all-endpoint" doc:id="edb8dbe7-3dc9-4d3e-ba40-d67c96b7d336" name="mainflow-command-all-endpoint"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="271d8796-a474-4520-9c99-bf74eb236fcb" processor="flow-ref" times="2">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="endpoint-post-command-soap" attributeName="name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:before-test name="global-set-event-before-test" doc:id="df34b2ab-7ad1-4645-8b70-8c1f78ef7d4d" >
+		<munit:set-event doc:name="Set Event" doc:id="5db86d71-df18-4fc3-b407-5410d65ec5f3" >
+			<munit:payload value='#[[{&#10;    "individualTag": "Y",&#10;    "firstNameEn": "Chrizzy",&#10;    "middleNameEn": "Poqui",&#10;    "lastNameEn": "Loco",&#10;    "dateOfBirth": "2001-03-17",&#10;    "placeOfBirth": "PH",&#10;    "nationality": "Filipino",&#10;    "contactNo": "090101010101",&#10;    "gender": "F",&#10;    "identificationType": "sss",&#10;    "identificationNo": "112313213",&#10;    "resAddrRoom": "1",&#10;    "resAddrFloor": "1",&#10;    "resAddrBlock": "28",&#10;    "resAddrLot": "3",&#10;    "resAddrBuildingName": "",&#10;    "resAddrStreet": "PUD Site",&#10;    "resAddrVillage": "Escopa",&#10;    "resAddrHousingProject": "Project 4",&#10;    "resAddrDistrict": "2",&#10;    "resAddrCity": "QC",&#10;    "resAddrCountryCode": "PH",&#10;    "companyNameEn": null,&#10;    "companyType": null,&#10;    "companyTelNo": null,&#10;    "companyPrimaryContactNo": null,&#10;    "companyDateOfIncorporation": null,&#10;    "companyCertificationType": null,&#10;    "companyCertificationNo": null,&#10;    "companyRegistrationType": null,&#10;    "companyRegistrationNo": null,&#10;    "comAddrRoom": null,&#10;    "comAddrFloor": null,&#10;    "comAddrBlock": null,&#10;    "comAddrLot": null,&#10;    "comAddrBuildingName": null,&#10;    "comAddrStreet": null,&#10;    "comAddrVillage": null,&#10;    "comAddrHousingProject": null,&#10;    "comAddrDistrict": null,&#10;    "comAddrCity": null,&#10;    "comAddrCountryCode": null,&#10;    "countryCodeIncorporation": "PH",&#10;    "countryCodeOperation": "PH",&#10;    "authorizedSigners": "Y",&#10;    "legal": "Y",&#10;    "management": "Y",&#10;    "owner": "Y",&#10;    "regulatory": "Y",&#10;    "companySourceIncome": null,&#10;    "natureOfCompany": "IT Industry",&#10;    "individualSourceIncome": "STAFF",&#10;    "natureOfIndividualSourceIncome": null,&#10;    "role": null,&#10;    "clientId": "fa8c20e6-28e7-4dd0-a335-fd9e73a25950",&#10;    "clientAcctId": "edaae4bd-ea0c-4e9b-a673-155591e19e62",&#10;    "clientType": "PERSON"&#10;}]]' />
+			<munit:attributes value="#[{method : 'POST'}]" />
+		</munit:set-event>
+	</munit:before-test>
 
 
 </mule>

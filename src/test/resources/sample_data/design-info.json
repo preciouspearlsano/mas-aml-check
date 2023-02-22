@@ -9,6 +9,9 @@
     },
     "e3cd9034-98b4-4bf3-b756-af3752efca57": {
       "payload": "sample_data/defaultnulltype.dwl"
+    },
+    "c9241e95-61db-42cf-bda9-209790b2ec79": {
+      "payload": "sample_data/getcustomerformcommandrequest.xml"
     }
   }
 }

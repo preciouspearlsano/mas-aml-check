@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:workday="http://www.mulesoft.org/schema/mule/workday"
-	xmlns:java="http://www.mulesoft.org/schema/mule/java"
-	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:aggregators="http://www.mulesoft.org/schema/mule/aggregators"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
@@ -10,7 +10,9 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd
-http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/aggregators http://www.mulesoft.org/schema/mule/aggregators/current/mule-aggregators.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d4275327-0a5d-4de3-b2b2-c2a0a1274e78" basePath="/mas/aml-check/v1" enableCookies="false">
 		<http:request-connection host="localhost" port="7070" />
 	</http:request-config>
@@ -32,6 +34,7 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 		<db:my-sql-connection host="${secure::db.host}" port="3306" user="${secure::db.user}" password="${secure::db.password}" database="aml_dev" />
 	</db:config>
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="9edc773b-e633-4bd9-93c6-5e6215534ac8" />
+	<configuration doc:name="Configuration" doc:id="eb0d291c-4748-4176-b334-6f9008ffdd54" defaultErrorHandler-ref="global-error-handler" />
 	<flow name="endpoint-get-command-reply-rest" doc:id="e7598300-856b-41b9-a1c1-0cb53818e4ab" >
 		<http:request method="GET" doc:name="Request" doc:id="8bd3d8de-74d2-4db7-8d70-f4266dac9701" config-ref="HTTP_Request_configuration" path="/external/rest/command/reply/{replyId}">
 			<http:uri-params ><![CDATA[#[output application/java
@@ -114,18 +117,6 @@ read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/jso
 			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
 				</db:insert>
 	</sub-flow>
-	<sub-flow name="subflow-command-all-endpoint" doc:id="e2d46837-f801-4e90-ab59-49123d46cfa0" >
-		<round-robin doc:name="Round Robin" doc:id="88d051cc-02c7-4782-998f-4013e143733d" >
-			<route >
-				<flow-ref doc:name="REST Flow Reference" doc:id="4157ee09-c133-4cf8-97c5-46bd269e22f3" name="endpoint-post-command-rest" />
-				<logger level="INFO" doc:name="Logger" doc:id="316bc8bc-95b2-435b-ab9e-68a7a40ed61b" message="#[payload]" />
-			</route>
-			<route >
-				<flow-ref doc:name="SOAP Flow Reference" doc:id="6c8f6a6a-2b42-4ca4-be14-25a0aaf8341c" name="endpoint-post-command-soap"/>
-				<logger level="INFO" doc:name="Logger" doc:id="6cfb727f-6fda-46b5-bb33-1b375b689dfe" message="#[payload]" />
-			</route>
-		</round-robin>
-	</sub-flow>
 	<flow name="mainflow-command-all-endpoint" doc:id="aad56e25-3e33-4a01-87b9-41dc17b74dd4" >
 		<http:listener doc:name="Listener" doc:id="71c5971f-e18c-4cfd-b9ea-32517cbbb256" path="/external/command" config-ref="HTTP_Listener_config">
 			<http:error-response >
@@ -135,27 +126,45 @@ read((commandreply replace "\\r" with "" replace "\\n" with ""),"application/jso
 		<choice doc:name="Choice" doc:id="5a44b8aa-634e-4f68-878f-c3016650cfaa" >
 			<when expression="#[attributes.method == 'POST']">
 				<validation:is-not-null doc:name="Is not null" doc:id="c96ee449-0d0f-4769-9edf-d65f3f5db2f3" value="#[payload]" message="Passing null data error." />
-				<parallel-foreach doc:name="Parallel For Each" doc:id="b8c856d0-9d41-448f-b495-7b16ce800180" collection="#[payload]">
-					<first-successful doc:name="First Successful" doc:id="e0ca3642-9c39-4d3e-85e7-13c074c783c1">
+				<parallel-foreach doc:name="Parallel For Each" doc:id="b8c856d0-9d41-448f-b495-7b16ce800180">
+					<round-robin doc:name="Round Robin" doc:id="0872fcc2-e150-4169-9b43-4f285b37e62d" >
 						<route >
-							<flow-ref doc:name="Flow Reference" doc:id="79e95c11-53ff-4e99-9122-4e5c9d3798bd" name="subflow-command-all-endpoint" />
+							<first-successful doc:name="First Successful" doc:id="e0ca3642-9c39-4d3e-85e7-13c074c783c1">
+						<route>
+							<flow-ref doc:name="REST Flow Reference" doc:id="b7b7a2f5-368a-4889-b786-96708257a5e6" name="endpoint-post-command-rest" />
 						</route>
-						<route >
-							<flow-ref doc:name="Flow Reference" doc:id="c2343c93-b615-4ca4-b704-0afd041f0e34" name="subflow-command-all-endpoint"/>
+						<route>
+							<flow-ref doc:name="SOAP Flow Reference" doc:id="a2d80c90-3cb6-47c2-b220-33cf004b98d2" name="endpoint-post-command-soap" />
 						</route>
+
 				</first-successful>
-					<until-successful maxRetries="1" doc:name="Until Successful" doc:id="713f00d0-5d11-4bee-9656-b915308d9601">
-					<set-payload value="#[payload]" doc:name="Set Payload" doc:id="14efb80a-4ba7-47ac-b87b-e61ac3c31466" mimeType="application/json" encoding="UTF-8"/>
+							<until-successful maxRetries="1" doc:name="Until Successful" doc:id="713f00d0-5d11-4bee-9656-b915308d9601" millisBetweenRetries="10000">
+						<set-payload value="#[payload]" doc:name="Set Payload" doc:id="14efb80a-4ba7-47ac-b87b-e61ac3c31466" mimeType="application/json" encoding="UTF-8" />
 				</until-successful>
+						</route>
+						<route >
+							<first-successful doc:name="First Successful" doc:id="97d6a19c-a209-4048-8029-69141ab13a6a" >
+								<route >
+									<flow-ref doc:name="SOAP Flow Reference" doc:id="4ad5ca1e-60b8-4c3a-ad3c-f1999d64ff56" name="endpoint-post-command-soap"/>
+								</route>
+								<route >
+									<flow-ref doc:name="REST Flow Reference" doc:id="96b8ffae-cc3b-4cf1-88ee-4955da3e45d0" name="endpoint-post-command-rest"/>
+								</route>
+							</first-successful>
+							<until-successful maxRetries="5" doc:name="Until Successful" doc:id="4e43be3d-ca52-45f8-96c7-fa5f67e7c410" >
+								<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d89cd7ec-294a-4bbc-ba52-ff290b36ef49" />
+							</until-successful>
+						</route>
+					</round-robin>
 				</parallel-foreach>
 			</when>
 			<when expression="#[attributes.method == 'GET']">
 				<scatter-gather doc:name="Scatter-Gather" doc:id="aada6606-90c0-438f-b846-5a09877a7767" >
 					<route >
-						<flow-ref doc:name="REST Flow Reference" doc:id="59cbdbc7-aba7-4662-aa5d-9daac07ff5cb" name="endpoint-get-command-reply-rest" targetValue="#[message]" />
+						<flow-ref doc:name="DB Flow Reference" doc:id="d7f5c522-4939-4291-b9fe-5f131de4640d" name="endpoint-internal-select-reply-status-by-commandid-test-mainflow" targetValue="#[message]" />
 					</route>
 					<route >
-						<flow-ref doc:name="DB Flow Reference" doc:id="d7f5c522-4939-4291-b9fe-5f131de4640d" name="endpoint-internal-select-reply-status-by-commandid-test-mainflow" targetValue="#[message]" />
+						<flow-ref doc:name="REST Flow Reference" doc:id="3b182548-4bbc-4b49-a3aa-3e08ea9136dd" name="endpoint-get-command-reply-rest" />
 					</route>
 				</scatter-gather>
 				<choice doc:name="Choice" doc:id="64af563c-929d-4fab-9a21-3f7b37fc49c5" >
@@ -242,24 +251,21 @@ output application/java
 	<flow name="endpoint-post-command-soap" doc:id="1864e809-3c43-4bea-b185-3b8283a90705" >
 		<http:listener doc:name="Listener" doc:id="a077e668-d956-453c-a142-956f7e38391d" path="/external/soap/command" config-ref="HTTP_Listener_config">
 		</http:listener>
-		<ee:transform doc:name="Transform Message" doc:id="57fb5c93-a36d-4350-99fc-a4592d97117c" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<wsc:consume operation="getCustomerFormCommand" doc:name="Consume" doc:id="738e1780-5a79-43d6-8ac2-ae5f92c599e5" config-ref="Web_Service_Consumer_Config" >
+			<error-mapping sourceType="WSC:CONNECTIVITY" targetType="APP:API_CONNECTIVITY" />
+			<error-mapping sourceType="WSC:SOAP_FAULT" targetType="APP:API_SOAP_FAULT" />
+			<wsc:message >
+				<wsc:body ><![CDATA[#[%dw 2.0
 output application/xml
 ns mod http://mas/aml/soap/model
 ---
 {
 	mod#getCustomerFormCommandRequest : payload
-}
-]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="1762173e-0343-4882-b55f-01c93ecafcf1" message="#[payload]" />
-		<wsc:consume operation="getCustomerFormCommand" doc:name="Consume" doc:id="738e1780-5a79-43d6-8ac2-ae5f92c599e5" config-ref="Web_Service_Consumer_Config" >
-			<error-mapping sourceType="WSC:CONNECTIVITY" targetType="APP:API_CONNECTIVITY" />
-			<error-mapping sourceType="WSC:SOAP_FAULT" targetType="APP:API_SOAP_FAULT" />
+}]]]></wsc:body>
+			</wsc:message>
 		</wsc:consume>
-		<java:invoke-static doc:name="Invoke static" doc:id="dd210c13-011e-4c3d-b7c4-d9394cf25090" class="mas.amlcheck.service.AmlCheckService" method="getLastLog()"/>
+		<java:new constructor="AmlCheckService()" doc:name="New" doc:id="dd2eb6c7-0033-4e78-8988-3384948ca518" class="mas.amlcheck.service.AmlCheckService" target="aml"/>
+		<java:invoke doc:name="Invoke" doc:id="57f98969-dd94-44e9-9d6c-8f0d1962cf2d" instance="#[vars.aml]" class="mas.amlcheck.service.AmlCheckService" method="getLastLog()"/>
 		<ee:transform doc:name="Transform Message" doc:id="23360cb8-48a3-470c-b55a-2602b2e4fc83" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
